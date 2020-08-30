@@ -1,0 +1,90 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+	id "com.google.protobuf" version "0.8.13"
+}
+
+group = 'org.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('testcontainersVersion', "1.14.3")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'net.devh:grpc-server-spring-boot-starter:2.10.1.RELEASE'
+	implementation 'org.apache.commons:commons-lang3:3.11'
+	implementation 'commons-validator:commons-validator:1.7'
+	implementation 'commons-codec:commons-codec:1.14'
+	implementation 'com.couchbase.client:java-client:3.0.7'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	def junitJupiterVersion = '5.4.2'
+
+	testImplementation 'org.testcontainers:couchbase:1.14.3'
+	testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+	testCompile "org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+	testCompile "org.testcontainers:testcontainers:1.14.3"
+	testCompile "org.testcontainers:junit-jupiter:1.14.3"
+	testImplementation 'net.devh:grpc-client-spring-boot-starter:2.10.1.RELEASE'
+	testImplementation 'io.grpc:grpc-netty:1.31.1'
+	testImplementation 'io.grpc:grpc-protobuf:1.31.1'
+	testImplementation 'io.grpc:grpc-stub:1.31.1'
+	testImplementation 'org.assertj:assertj-core:3.17.0'
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+	}
+}
+
+sourceSets {
+	main {
+		proto {
+		}
+		java {
+			srcDirs 'build/generated/source/proto/main/java'
+			srcDirs 'build/generated/source/proto/main/grpc'
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+dependencies {
+	// You need to depend on the lite runtime library, not protobuf-java
+	compile 'com.google.protobuf:protobuf-javalite:3.8.0'
+}
+
+protobuf {
+	protoc {
+		artifact = 'com.google.protobuf:protoc:3.8.0'
+	}
+
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.23.0'
+		}
+	}
+
+	generateProtoTasks {
+		all()*.plugins {
+			grpc{}
+		}
+	}
+}
