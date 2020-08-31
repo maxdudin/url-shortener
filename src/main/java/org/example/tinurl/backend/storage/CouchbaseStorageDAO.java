@@ -46,8 +46,8 @@ public class CouchbaseStorageDAO implements StorageDAO {
                         Optional.of(couchbaseManagerPort))));
 
         final Cluster cluster = Cluster.connect(seedNodes, clusterOptions("Administrator", "password"));
-        final Bucket urlBucket = cluster.bucket("urlBucket");
-        urlBucketCollection = urlBucket.collection("urlCollection");
+        final Bucket urlBucket = cluster.bucket("urlbucket");
+        urlBucketCollection = urlBucket.defaultCollection();
     }
 
     @Override

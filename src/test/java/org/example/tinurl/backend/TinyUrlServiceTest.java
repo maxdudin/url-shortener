@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -17,7 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TinyUrlServiceTest {
 
     @Container
-    public static CouchbaseContainer couchbaseContainer = new CouchbaseContainer();
+    public static CouchbaseContainer couchbaseContainer = new CouchbaseContainer("couchbase/server:6.5.0")
+            .withBucket(new BucketDefinition("urlbicket").withPrimaryIndex(false));
 
     @DynamicPropertySource
     static void dataSourceProperties(DynamicPropertyRegistry registry) {
