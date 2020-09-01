@@ -17,13 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TinyUrlServiceTest {
 
     @Container
-    public static CouchbaseContainer couchbaseContainer =
-            new CouchbaseContainer("couchbase/server:6.5.0");
+    public static CouchbaseContainer couchbaseContainer = new CouchbaseContainer();
 
     @DynamicPropertySource
     static void dataSourceProperties(DynamicPropertyRegistry registry) {
         registry.add("couchbase.mgmt_port", () -> couchbaseContainer.getMappedPort(8091));
         registry.add("couchbase.kv_port", () -> couchbaseContainer.getMappedPort(11210));
+        registry.add("couchbase.url", () -> "localhost");
     }
 
     @Test
