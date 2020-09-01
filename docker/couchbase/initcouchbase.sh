@@ -9,7 +9,7 @@ do
 done
 
 couchbase-cli cluster-init -c localhost:8091 \
-    --cluster-username=Administrator --cluster-password=password --cluster-init-ramsize=600  \
+    --cluster-username=Administrator --cluster-password=password \
     -u Administrator -p password
 
-echo 'Couchbase initializated'
+tail -f /dev/null

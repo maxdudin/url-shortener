@@ -2,6 +2,7 @@ version: "3"
 services:
   db:
     build: ./couchbase/.
+    tty: true
     deploy:
       replicas: 1
     ports:
@@ -14,6 +15,5 @@ services:
     build: ./app/.
     ports:
       - 9090:9090
-    entrypoint: ["wait-for-it.sh", "-s" ,"-t", "20", "http://localhost:33615/pools/default", "--"]
     depends_on:
       - "db"
