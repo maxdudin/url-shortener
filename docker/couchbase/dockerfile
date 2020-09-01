@@ -1,0 +1,5 @@
+FROM couchbase
+RUN mkdir files
+COPY initcouchbase.sh files/
+RUN chmod +x files/initcouchbase.sh
+ENTRYPOINT ./files/initcouchbase.sh

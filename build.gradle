@@ -32,11 +32,11 @@ dependencies {
 	def junitJupiterVersion = '5.4.2'
 
 	testImplementation 'org.testcontainers:couchbase:1.14.3'
-	testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
-	testCompile "org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
-	testCompile "org.testcontainers:testcontainers:1.14.3"
-	testCompile "org.testcontainers:junit-jupiter:1.14.3"
+	testImplementation "org.testcontainers:testcontainers:1.14.3"
+	testImplementation "org.testcontainers:junit-jupiter:1.14.3"
 	testImplementation 'net.devh:grpc-client-spring-boot-starter:2.10.1.RELEASE'
 	testImplementation 'io.grpc:grpc-netty:1.31.1'
 	testImplementation 'io.grpc:grpc-protobuf:1.31.1'
@@ -87,4 +87,11 @@ protobuf {
 			grpc{}
 		}
 	}
+}
+
+bootJar {
+	def dockerFolderPath = project.getRootDir().toPath()
+			.resolve("docker")
+			.resolve("app")
+	destinationDirectory = file(dockerFolderPath.toFile())
 }

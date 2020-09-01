@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: couchbase
+    build: ./couchbase/.
     deploy:
       replicas: 1
     ports:
@@ -10,9 +10,10 @@ services:
       - 8093:8093
       - 8094:8094
       - 11210:11210
-  service:
-    build: .
+  app:
+    build: ./app/.
     ports:
       - 9090:9090
+    entrypoint: ["wait-for-it.sh", "-s" ,"-t", "20", "http://localhost:33615/pools/default", "--"]
     depends_on:
       - "db"

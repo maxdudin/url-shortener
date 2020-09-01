@@ -1,6 +1,7 @@
 package org.example.tinurl.backend.storage;
 
 import com.couchbase.client.core.env.SeedNode;
+import com.couchbase.client.core.error.BucketExistsException;
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -8,6 +9,7 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.MutationResult;
+import com.couchbase.client.java.manager.bucket.BucketSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +48,13 @@ public class CouchbaseStorageDAO implements StorageDAO {
                         Optional.of(couchbaseManagerPort))));
 
         final Cluster cluster = Cluster.connect(seedNodes, clusterOptions("Administrator", "password"));
+
+        try {
+            cluster.buckets().createBucket(BucketSettings.create("urlbucket"));
+        } catch (BucketExistsException e) {
+            LOG.info("Bucket urlbucket already exists");
+        }
+
         final Bucket urlBucket = cluster.bucket("urlbucket");
         urlBucketCollection = urlBucket.defaultCollection();
     }
