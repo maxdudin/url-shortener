@@ -24,6 +24,7 @@ dependencies {
 	implementation 'commons-validator:commons-validator:1.7'
 	implementation 'commons-codec:commons-codec:1.14'
 	implementation 'com.couchbase.client:java-client:3.0.7'
+	implementation 'co.elastic.apm:apm-agent-api:1.17.0'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

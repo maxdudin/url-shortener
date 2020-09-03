@@ -1,5 +1,7 @@
 package org.example.tinurl.backend;
 
+import co.elastic.apm.api.CaptureSpan;
+import co.elastic.apm.api.CaptureTransaction;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.stub.StreamObserver;
@@ -25,6 +27,8 @@ public class TinyUrlService extends TinyUrlServiceGrpc.TinyUrlServiceImplBase {
     }
 
     @Override
+    @CaptureTransaction
+    @CaptureSpan
     public void getMini(GetMiniRequest request, StreamObserver<GetMiniResponse> responseObserver) {
         final String originalUrl = request.getOriginalUrl();
 
@@ -42,6 +46,8 @@ public class TinyUrlService extends TinyUrlServiceGrpc.TinyUrlServiceImplBase {
     }
 
     @Override
+    @CaptureTransaction
+    @CaptureSpan
     public void getMaxi(GetMaxiRequest request, StreamObserver<GetMaxiResponse> responseObserver) {
         final String tinyUrl = request.getMinifiedUrl();
         final Optional<String> orgUrl = storageDAO.originalUrl(tinyUrl);

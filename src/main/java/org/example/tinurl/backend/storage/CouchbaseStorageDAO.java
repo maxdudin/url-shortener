@@ -1,5 +1,7 @@
 package org.example.tinurl.backend.storage;
 
+import co.elastic.apm.api.CaptureSpan;
+import co.elastic.apm.api.CaptureTransaction;
 import com.couchbase.client.core.env.SeedNode;
 import com.couchbase.client.core.error.BucketExistsException;
 import com.couchbase.client.core.error.DocumentNotFoundException;
@@ -60,6 +62,8 @@ public class CouchbaseStorageDAO implements StorageDAO {
     }
 
     @Override
+    @CaptureTransaction
+    @CaptureSpan
     public Optional<String> originalUrl(String tinyUrl) {
         final GetResult getResult = urlBucketCollection.get(tinyUrl);
 
@@ -72,6 +76,8 @@ public class CouchbaseStorageDAO implements StorageDAO {
     }
 
     @Override
+    @CaptureTransaction
+    @CaptureSpan
     public String put(String tinyUrl, String originalUrl) {
         final MutationResult upsertResult = urlBucketCollection.upsert(
                 tinyUrl,
